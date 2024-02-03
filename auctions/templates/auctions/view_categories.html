@@ -1,0 +1,29 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>{{categories}}</h2>
+
+
+    {%for i in categorie_list %}
+    <a href="{% url 'listing' i.id %}">
+    <div class="grid"> 
+   <div class="grid-item">
+    <div class="img"> 
+        <img src="{{i.url}}"  alt="{{i.title}}">
+        <h5 class="cotgry"> {{i.category}} </h5>
+     </div>
+    <div class="contact"> 
+     <h2>{{i.title}} </h2>
+    
+     <h4><b> Price : </b>${{i.amount}} </h4>
+    <p> {{i.description}} </p>
+    
+
+     </div>
+    </div>
+</div>
+</a>
+    {% endfor %}
+
+
+{% endblock %}

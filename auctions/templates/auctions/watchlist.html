@@ -1,0 +1,61 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2> Watch list</h2>
+
+
+  {{meesage}}
+  <div class="grid">
+    {% for categorie_list in categorie_lists %}
+    <div class="grid-item">
+      <div class="img_single ">
+        <img src="{{categorie_list.url}}" alt="{{categorie_list.title}}">
+
+      </div>
+      <div class="contact">
+      
+        <h2>{{categorie_list.title}} </h2>
+        <h4><b> Price : </b>${{categorie_list.amount}} </h4>
+        <p> {{categorie_list.description}} </p>
+        <p>Add at {{categorie_list.created_at}} </p>
+        <h5> Catgery: {{categorie_list.category}} </h5>
+
+
+        <h5>status:{{ categorie_list.status}} </h5>
+
+
+        <h5> Creat By: </h5>
+        {% comment %} watch list button {% endcomment %}
+        {% if user.is_authenticated %}
+        {% if categorie_list.id in request.session.watchlist %}
+        <div>
+          <form action="{% url 'Romvewatchlist' %}" method="post">
+            {% csrf_token %}
+            <input class="form-control" type="number" name="RomveWatchlist" value="{{categorie_list.id}}" hidden>
+           <input class="btn btn-primary" type="submit" value="Romve Watchlist">
+      </form>
+
+        </div>
+        {% else  %}
+
+        <div>
+          <form action="{% url 'watchlist' %}" method="post">
+            {% csrf_token %}
+            <input class="form-control" type="number" name="Watchlist" value="{{categorie_list.id}}" hidden>
+            <input class="btn btn-primary" type="submit" value="Add Watchlist">
+          </form>
+        </div>
+     {% endif %}
+     {% endif %}
+
+      </div>
+    </div>
+{% endfor %}
+ {% if not categorie_lists%}
+ <div class="alert-warning" >
+   <h5 > your watch list is empty  <h5>
+  </div>
+    {%  endif  %}
+  </div>
+
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+{% comment %}  list box  {% endcomment %}
+    <div class="grid"> 
+        {% for i in categorie_list  %}
+        <div class="grid-item">
+        </div>
+        {% endfor %}
+    </div>
+
+       
+ 
+    <a href="listing/{{i.id}}">
+    <div class="img"> 
+        <img src="{{i.url}}"  alt="{{i.title}}">
+        <h5 class="cotgry"> {{i.category}} </h5>
+     </div>
+    <div class="contact"> 
+     <h2>{{i.title}} </h2>
+    
+     <h4><b> Price : </b>${{i.amount}} </h4>
+    <p> {{i.description}} </p>
+     </div>
+    </a>
+
+
+
+
+
+
+</div>
+{% endblock %}

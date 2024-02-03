@@ -1,0 +1,19 @@
+
+
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2> Categories</h2>
+    
+<div class="continer">
+{% for i in categorie_list %}
+
+
+{% for x in i %}
+<div class="grid-item">
+<a href="categorieView/{{x}}">{{x}}   </a>
+</div>
+{% endfor %}
+{% endfor %}
+</div>
+{% endblock %}
