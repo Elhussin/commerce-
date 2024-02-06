@@ -7,11 +7,10 @@
   {{meesage}}
   <div class="grid">
     {% for categorie_list in categorie_lists %}
-    <div class="grid-item">
-      <div class="img_single ">
-        <img src="{{categorie_list.url}}" alt="{{categorie_list.title}}">
-
-      </div>
+    <div class="gridIteam  ">
+      <a href="{% url 'listing' categorie_list.id %}" title="view">
+        <img class="gridIteam-img " src="{{categorie_list.url}}" alt="{{categorie_list.title}}">
+ 
       <div class="contact">
       
         <h2>{{categorie_list.title}} </h2>
@@ -25,6 +24,7 @@
 
 
         <h5> Creat By: </h5>
+      </a>
         {% comment %} watch list button {% endcomment %}
         {% if user.is_authenticated %}
         {% if categorie_list.id in request.session.watchlist %}
@@ -36,15 +36,7 @@
       </form>
 
         </div>
-        {% else  %}
 
-        <div>
-          <form action="{% url 'watchlist' %}" method="post">
-            {% csrf_token %}
-            <input class="form-control" type="number" name="Watchlist" value="{{categorie_list.id}}" hidden>
-            <input class="btn btn-primary" type="submit" value="Add Watchlist">
-          </form>
-        </div>
      {% endif %}
      {% endif %}
 

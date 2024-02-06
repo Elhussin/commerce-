@@ -5,25 +5,41 @@ body {
 
 .grid {
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: auto;
   grid-column-gap: 20px;
-  grid-row-gap: 10px;
-  background-color: white; }
+  background-color: white;
+  width: 90%;
+  grid-row-gap: 20px;
+  margin: auto; }
 
-.contact, .grid-item {
-  max-width: 500px; }
+.grid-item {
+  margin-bottom: 20px; }
 
-.grid .img {
-  max-width: 700px;
-  float: left; }
-.grid img {
+.gridIteam-img {
+  float: left;
+  max-width: 40%;
   width: 500px;
-  height: 500px;
-  max-width: 700px; }
-.grid .img_single img {
-  margin: auto;
-  height: 500px;
-  width: 70%; }
+  height: 400px;
+  max-height: 350px; }
+
+.contact {
+  margin-left: 20px;
+  width: 40%;
+  float: right;
+  margin: 7px;
+  justify-content: flex-end; }
+
+.listin-img, .listin-contact {
+  max-width: 70%;
+  width: 800px;
+  max-height: 500px; }
+
+.listing {
+  max-width: 900px;
+  margin: auto; }
+
+.clearBoth {
+  clear: both; }
 
 .formList {
   max-width: 700px;
@@ -44,5 +60,14 @@ body {
   grid-column-gap: 20px;
   grid-row-gap: 10px;
   grid-template-columns: auto auto auto auto; }
+
+@media screen and (max-width: 800px) {
+  .gridIteam-img, .contact, .grid-item, .listin-img, .listin-contact {
+    width: 100%;
+    max-width: 100%;
+    clear: both; }
+
+  .grid-item {
+    height: auto; } }
 
 /*# sourceMappingURL=styles.css.map */

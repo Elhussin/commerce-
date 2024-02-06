@@ -2,49 +2,69 @@
 
 {% block body %}
 
-<div style="max-width:800px; margin:auto;">
-  <h2> Listing</h2>
-  {{meesage}}
-  <div class="grid">
-    <div class="grid-item">
-      <div class="img_single ">
-        <img src="{{categorie_list.url}}" alt="{{categorie_list.title}}">
+<div class="listing">
 
+  <h2> Listing</h2>
+
+  {% comment %} gird box show iteam {% endcomment %}
+  <div class="grid">
+   
+    <div class="grid-item">
+      {% if request.user.id == categorie_list.user_id %}
+      {% comment %}end button for owner can end the list only {% endcomment %}
+      <div>
+        <form action="{% url 'endPaid' %}" method="post">
+          {% csrf_token %}
+          <div class="form-group">
+            <input class="form-control" type="number" name="end_listId" value="{{categorie_list.id}}" hidden>
+            <input class="btn btn-warning  float-left" type="submit" value="End Paid">
+          </div>
+        </form>
       </div>
-      <div class="contact">
+      {% comment %} end for end button {% endcomment %}
+      {% endif %}
+
+      <img class="listin-img" src="{{categorie_list.url}}" alt="{{categorie_list.title}}">
+
+    
+      <div class="listin-contact">
         <h2>{{categorie_list.title}} </h2>
-        <h4><b> Price : </b>${{categorie_list.amount}} </h4>
+        <h4><b> Price : </b>
+          
+          {% if categorie_list.endAmont < categorie_list.amount  %}
+          ${{categorie_list.amount}} 
+          {% else %}
+          ${{categorie_list.endAmont}} 
+          {% endif%}
+        
         <p> {{categorie_list.description}} </p>
         <p>Add at {{categorie_list.created_at}} </p>
         <h5> Catgery: {{categorie_list.category}} </h5>
-
-
         <h5>status:{{ categorie_list.status}} </h5>
-
-
         <h5> Creat By: </h5>
         {% comment %} watch list button {% endcomment %}
         {% if user.is_authenticated %}
         {% if categorie_list.id in request.session.watchlist %}
-        <div>
+       
           <form action="{% url 'Romvewatchlist' %}" method="post">
             {% csrf_token %}
             <input class="form-control" type="number" name="RomveWatchlist" value="{{categorie_list.id}}" hidden>
-           <input class="btn btn-primary" type="submit" value="Romve Watchlist">
-      </form>
+            <input class="btn btn-primary" type="submit" value="Romve Watchlist">
+          </form>
+       
 
-        </div>
-        {% else  %}
+        {% else %}
 
-        <div>
+   
           <form action="{% url 'watchlist' %}" method="post">
             {% csrf_token %}
             <input class="form-control" type="number" name="Watchlist" value="{{categorie_list.id}}" hidden>
             <input class="btn btn-primary" type="submit" value="Add Watchlist">
           </form>
-        </div>
-     {% endif %}
-     {% endif %}
+        {% endif %}
+        {% endif %}
+
+
 
       </div>
     </div>
@@ -52,52 +72,56 @@
   </div>
 
 
-{% comment %} confiarm user login  {% endcomment %}
+  {% comment %} confiarm user login {% endcomment %}
   {% if user.is_authenticated %}
 
-  {% comment %} confiarm list open our not  {% endcomment %}
-  {% if categorie_list.status == "Open" %}
+  {% comment %} confiarm list open our not {% endcomment %}
+  {% if categorie_list.status == "open" %}
 
-  {% if request.user.id != categorie_list.user_id_id %}
+  {% if request.user.id != categorie_list.user_id %}
   {% comment %} addd paid oofer only for login and and open iteam & not for owner {% endcomment %}
+  {% comment %} error masseage box {% endcomment %}
+  
+  {% if messages %}
+  
+        {% for message in messages %}
+        {{ message|safe }}
+     
+        {% endfor %}
+
+{% endif %}
   <div id="paid">
+
     <form action="{% url 'paid' %}" method="post">
       {% csrf_token %}
       <div class="form-group">
-        <input class="form-control" type="number" name="paid_userId" value="{{ request.user.id}}" hidden>
+        <input class="form-control " type="number" name="paid_userId" value="{{ request.user.id}}" hidden>
         <input class="form-control" type="number" name="paid_listId" value="{{categorie_list.id}}" hidden>
         <input class="form-control" autofocus type="number" name="amount" placeholder="Amount" required>
       </div>
+      
       <div class="form-group">
         <input class="btn btn-primary" type="submit" value="Paid">
       </div>
-    </form>
-  </div>
-  {% endif %}
-  {% comment %} end paid oofer {% endcomment %}
-  {% if request.user.id == categorie_list.user_id_id %}
-  {% comment %}end button for owner can end the list only {% endcomment %}
-  <div>
-    <form action="{% url 'endPaid' %}" method="post">
-      {% csrf_token %}
-      <div class="form-group">
-        <input class="form-control" type="number" name="end_listId" value="{{categorie_list.id}}" hidden>
-        <input class="btn btn-primary" type="submit" value="End Paid">
-      </div>
-    </form>
 
+    </form>
   </div>
-  {% comment %} end for end button {% endcomment %}
   {% endif %}
+
+  {% comment %} end paid oofer {% endcomment %}
+
+
   {% comment %} add comment for open list only {% endcomment %}
+  <h5 class="hr ">Add  Commente </h5>
   <div>
     <form action="{% url 'comment' %}" method="post">
       {% csrf_token %}
       <div class="form-group">
         <input class="form-control" type="number" name="userId" value="{{ request.user.id}}" hidden>
         <input class="form-control" type="number" name="listId" value="{{categorie_list.id}}" hidden>
-        <input class="form-control"  type="text" name="title" placeholder="Title" required>
+        <input class="form-control" type="text" name="title" placeholder="Title" required>
       </div>
+
       <div class="form-group">
         <label for="exampleFormControlTextarea1">Comment </label>
         <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="comment" required></textarea>
@@ -109,30 +133,32 @@
   </div>
   {% comment %} end comment {% endcomment %}
   {% else %}
-  {% comment %} masseg for close iteam  {% endcomment %}
-  <div>
+
+  {% comment %} masseg for close iteam {% endcomment %}
+
     <h5 class="alert-danger p-2">This List already close </h5>
-  </div>
+
 
   {% endif %}
-  
+
 
   {% comment %} if user not login {% endcomment %}
-  
+
   {% else %}
   <h5> To Add comment or Paid <a href="{% url 'login' %}">login</a></h5>
   {% endif %}
 
-{% comment %} thro all comments  {% endcomment %}
+  {% comment %} thro all comments {% endcomment %}
 
-      <div>
-        <h5 class="hr"> Commentes </h5>
-        {% for i in Comment%}
-        <h5>{{i.title}} </h5>
-        <p> {{i.comment}} </p>
-        <p>add By:{{i.id}} <span> Creat at : {{i.created_Comment_at}} </span> </p>
-        {% endfor %}
-       </div>
+  <div>
+    <h5 class="hr "> Commentes </h5>
+    {% for i in Comment%}
+    <h5>{{i.title}} </h5>
+    <p> {{i.comment}} </p>
+    <p>add By:{{i.id}} <span> Creat at : {{i.Comment_at}} </span> </p>
+    {% endfor %}
+  </div>
 
+</div>
 
-      {% endblock %}
+  {% endblock %}

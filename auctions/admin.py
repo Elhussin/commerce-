@@ -1,10 +1,10 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import auction_listings, Paid ,Comment
+from .models import Listing, Paid ,Comment
 # Register your models here.
 
-class auction_listingsAdmin(admin.ModelAdmin):
+class ListingAdmin(admin.ModelAdmin):
     list_display = ("__str__", "category")
 
 class CommentAdmin(admin.ModelAdmin):
@@ -14,5 +14,5 @@ class CommentAdmin(admin.ModelAdmin):
     
 
 admin.site.register(Comment,CommentAdmin)
-admin.site.register(auction_listings, auction_listingsAdmin)
+admin.site.register(Listing, ListingAdmin)
 # admin.site.register(Passenger, PassengerAdmin)

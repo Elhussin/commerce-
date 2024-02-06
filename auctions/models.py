@@ -10,16 +10,17 @@ class User(AbstractUser):
 
 
 
-class auction_listings(models.Model):                
+class Listing(models.Model):                
         title = models.CharField(max_length=64)
         description =models.CharField(max_length=64)
-        amount = models.CharField(max_length=64)
-        url =models.CharField(max_length=64)
+        amount = models.FloatField(max_length=64)
+        endAmont = models.FloatField(max_length=64,default=0)
+        url =models.CharField(max_length=250)
         category =models.CharField(max_length=64)
         created_at = models.DateTimeField(auto_now_add=True)
         updated_at = models.DateTimeField(auto_now=True)
-        user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name="EnterUser")
-        status=models.CharField(max_length=64 ,default=0)
+        user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="EnterUser")
+        status=models.CharField(max_length=64 ,default='open')
         def __str__(self):
             return f"{self.id} {self.title} {self.description} {self.amount} {self.url}  {self.category}"
         
@@ -29,14 +30,14 @@ class auction_listings(models.Model):
 class Comment(models.Model):
     title =models.CharField(max_length=64)
     comment =models.TextField()
-    auction_listings_id = models.ForeignKey(auction_listings, on_delete=models.CASCADE, related_name="auction_listings")
-    created_Comment_at = models.DateTimeField(auto_now_add=True)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name="User")
+    Listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="Listing" )
+    Comment_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="User")
 
 
 
 
 class Paid(models.Model):
-    Paid_amount = models.CharField(max_length=64)
-    user_bids_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name="UserId")
-    listings_id = models.ForeignKey(auction_listings, on_delete=models.CASCADE, related_name="listID")
+    Paid_amount = models.FloatField(max_length=64)
+    user_bids = models.ForeignKey(User, on_delete=models.CASCADE, related_name="UserId")
+    Listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="listID")

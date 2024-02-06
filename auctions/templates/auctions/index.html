@@ -3,32 +3,43 @@
 {% block body %}
     <h2>Active Listings</h2>
 {% comment %}  list box  {% endcomment %}
-    <div class="grid"> 
-        {% for i in categorie_list  %}
-        <div class="grid-item">
-        </div>
-        {% endfor %}
-    </div>
 
-       
- 
-    <a href="listing/{{i.id}}">
-    <div class="img"> 
-        <img src="{{i.url}}"  alt="{{i.title}}">
-        <h5 class="cotgry"> {{i.category}} </h5>
-     </div>
-    <div class="contact"> 
-     <h2>{{i.title}} </h2>
     
-     <h4><b> Price : </b>${{i.amount}} </h4>
-    <p> {{i.description}} </p>
-     </div>
-    </a>
 
+    <div class="grid" >
 
+        {% for i in categorie_list  %}
 
+  
+            <div class= "gridIteam">
+                <a href="{% url 'listing' i.id %}" title="view">
 
+                {% comment %} img box  {% endcomment %}
+ 
+                <img  class="gridIteam-img"  src="{{i.url}}"  alt="{{i.title}}" style="width:100%;">
+  
+             {% comment %} end image box {% endcomment %}
 
-
-</div>
+             {% comment %} content box{% endcomment %}
+             <div class="contact">
+               <h2>{{i.title}} </h2>   
+              <h4><b> Price : </b>
+                {% if i.endAmont < i.amount  %}
+                ${{i.amount}} 
+                {% else %}
+                ${{i.endAmont}} 
+                {% endif%}
+            
+            </h4>
+              <p> {{i.description}} </p>
+              <h5 class="cotgry"> {{i.category}} </h5>
+     
+              </div>
+              {% comment %} end contact box {% endcomment %}
+            </a>
+   
+            </div>
+                 {% comment %} end iteam box {% endcomment %}
+        {% endfor %}
+            </div>
 {% endblock %}
