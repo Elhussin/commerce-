@@ -40,39 +40,32 @@ body {
     max-height: 350px;
   }
 .contact {
-    margin-left: 20px;
-   width: 40%;
-  float: right;
- margin: 7px; 
-justify-content:flex-end;
+    // margin-left: 20px;
+    margin-left: auto;
+
+    width: 40%;
+    float: right;
+
 }
 .listin-img ,.listin-contact {
     max-width: 70%;
-    width: 800px;
- 
-    max-height: 500px;
+    width: 900px;
+    max-height: 500px; 
+    margin-top: 10px;
 
 }.listing{
     max-width:900px; 
     margin:auto;
 }
-
-
-
-
  
 .clearBoth{
     clear: both;
 }
 
-.formList{
-    max-width: 700px;
-    width: 100%;
-    margin: auto;
-}
+
 
 .hr{
-    border-bottom:  2px solid black;
+    border-bottom:  2px solid $colorFooter;
 }
 
 

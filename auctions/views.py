@@ -121,16 +121,12 @@ def view_categories(request,categori):
 
 
 def listing(request,id):
-    categorie_list = Listing.objects.get(pk=id)
-    publication = Comment.objects.select_related('user_id').all().values()
+    categorie_list = Listing.objects.select_related('user').get(pk=id)
     try:
-       
-       comments =Comment.objects.all().filter(Listing_id=id).values()
-       return render(request, "auctions/Listing.html",{'categorie_list':categorie_list ,'Comment':comments} )
-
+       comments=Comment.objects.select_related('user').filter(Listing_id=id)
+       return render(request, "auctions/Listing.html",{'categorie_list':categorie_list ,'Comment':comments } )
     except :
         comments=[]
-
     return render(request, "auctions/Listing.html",{'categorie_list':categorie_list ,'Comment':comments} )
 
 def add_comment(request): 
@@ -144,8 +140,7 @@ def add_comment(request):
             add_commentes.save()
             # return render(request, "auctions/create_Listing.html",{"meesage":"Creat Sucess"})
             return HttpResponseRedirect( reverse("listing", kwargs={"id": Listing_id}))
-
-        except IntegrityError:
+        except :
                return HttpResponseRedirect( reverse("listing", kwargs={"id": Listing_id},),{"meesage":'Comment not ADD'})
     else:
         return HttpResponseRedirect( reverse("listing", kwargs={"id": Listing_id}))

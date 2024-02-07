@@ -10,24 +10,25 @@
   <div class="grid">
    
     <div class="grid-item">
-      {% if request.user.id == categorie_list.user_id %}
+      {% if request.user.id == categorie_list.user_id   %}
+      {% if categorie_list.status == "open" %}
       {% comment %}end button for owner can end the list only {% endcomment %}
-      <div>
+      <div class="float-right ">
         <form action="{% url 'endPaid' %}" method="post">
           {% csrf_token %}
           <div class="form-group">
             <input class="form-control" type="number" name="end_listId" value="{{categorie_list.id}}" hidden>
-            <input class="btn btn-warning  float-left" type="submit" value="End Paid">
+            <input class="btn btn-warning " type="submit" value="End Paid">
           </div>
         </form>
       </div>
       {% comment %} end for end button {% endcomment %}
       {% endif %}
-
+      {% endif %}
       <img class="listin-img" src="{{categorie_list.url}}" alt="{{categorie_list.title}}">
 
     
-      <div class="listin-contact">
+      <div class="listin-contact alert alert-light text-dark">
         <h2>{{categorie_list.title}} </h2>
         <h4><b> Price : </b>
           
@@ -41,7 +42,7 @@
         <p>Add at {{categorie_list.created_at}} </p>
         <h5> Catgery: {{categorie_list.category}} </h5>
         <h5>status:{{ categorie_list.status}} </h5>
-        <h5> Creat By: </h5>
+        <h5> Creat By: <a href="#">{{ categorie_list.user|title}} <a/> </h5>
         {% comment %} watch list button {% endcomment %}
         {% if user.is_authenticated %}
         {% if categorie_list.id in request.session.watchlist %}
@@ -152,10 +153,13 @@
 
   <div>
     <h5 class="hr "> Commentes </h5>
+
     {% for i in Comment%}
+    <div class="alert alert-info text-dark    ">
     <h5>{{i.title}} </h5>
     <p> {{i.comment}} </p>
-    <p>add By:{{i.id}} <span> Creat at : {{i.Comment_at}} </span> </p>
+   <p>  Add By : <a href="#">{{i.user|title}} </a> <span class="float-right"> Creat at : {{i.Comment_at}} </span> </p>
+    </div>
     {% endfor %}
   </div>
 

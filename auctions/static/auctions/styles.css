@@ -23,16 +23,19 @@ body {
   max-height: 350px; }
 
 .contact {
-  margin-left: 20px;
+  margin-left: auto; 
   width: 40%;
   float: right;
-  margin: 7px;
-  justify-content: flex-end; }
+  
+ }
 
 .listin-img, .listin-contact {
   max-width: 70%;
-  width: 800px;
-  max-height: 500px; }
+  width: 900px;
+  max-height: 500px; 
+  margin-top: 10px;
+
+}
 
 .listing {
   max-width: 900px;
