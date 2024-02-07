@@ -1,5 +1,6 @@
 $colorbakground:rgb(255, 255, 255);
 $colorFooter:rgb(87, 87, 87);
+$fontBlack:black;
 body {
     padding: 0px;
     margin: 0px;
@@ -10,51 +11,57 @@ body {
 %grid{
     display: grid;
     grid-template-columns:  auto ;
-    grid-column-gap: 20px; 
+    grid-row-gap: 30px; 
     background-color:$colorbakground;
-    width:90%;
+    width:90vw;
     grid-row-gap: 20px;
+
+
+}
+.home{
+    max-width: 90%;
     margin: auto;
-
 }
-%gridIteam{
-//    height: 500px;
-   margin-bottom:20px;
-  
-}
-
 .grid {
     @extend %grid;
-  
 }
-.grid-item {
-    @extend %gridIteam;
-    
+
+.img-box{
+    width: 40%;
+    float: left;
+
 }
 
 .gridIteam-img{
-    float: left;
-    max-width: 40%;
-    width: 500px;
-    height: 400px;
-    max-height: 350px;
+    width: 90%;
+    height: 350px;
+    max-width: 500px;
+    margin: auto;
+ 
   }
 .contact {
-    // margin-left: 20px;
-    margin-left: auto;
 
+    margin-left: 30px;
     width: 40%;
-    float: right;
+    float: left;
+    color: $fontBlack;
 
 }
-.listin-img ,.listin-contact {
-    max-width: 70%;
-    width: 900px;
-    max-height: 500px; 
+.listin-img {
+    width: 100%;
+    max-height: 500px;
+}
+.listin-contact {
+
     margin-top: 10px;
 
-}.listing{
+
+}
+
+
+.listing{
     max-width:900px; 
+    width: 80%;
     margin:auto;
 }
  
@@ -62,8 +69,17 @@ body {
     clear: both;
 }
 
+.containerBox {
+    position: relative;
+    text-align: center;
+    color: white;
+  }
 
-
+.top-left {
+    position: absolute;
+    top:18px;
+    left: 16px;
+  }
 .hr{
     border-bottom:  2px solid $colorFooter;
 }
@@ -91,16 +107,17 @@ body {
 
 
 @media screen and (max-width: 972px) {
-    .gridIteam-img, .contact, .grid-item, .listin-img, .listin-contact {
-      width: 100%;
-      max-width: 100%;
-      clear: both; }
-  
-    .grid-item {
-      height: auto; }
-  
-    .listing{
-      width: 90%;
+     .contact, .listin-contact  .listing {
+      width: 90%; }
+    .contact{
+        margin-left: 0;
+    }
+
+    .gridIteam-img ,.img-box ,.contact{
+        width: 100%;
+        max-width: 100%;
     }
     
+
+
   }

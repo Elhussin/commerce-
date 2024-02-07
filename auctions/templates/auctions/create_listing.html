@@ -3,10 +3,17 @@
 {% block body %}
 
 <div class="listing">
-    {{meesage}}
+    {% if error %}
+    <p class="alert alert-warning">  {{error}} </p>
+    {% endif%}
+    {% if meesage %}
+    <p class="alert alert-success">  {{meesage}}</p>
+    {% endif%}
+   
+    
         <h2>Create Listing</h2>
 
-    <form action="{% url 'create_listing' %}" method="post">
+    <form action="{% url 'Newlisting' %}" method="post">
         {% csrf_token %}
         <div class="form-group"> 
             <input class="form-control" autofocus type="text" name="title" placeholder="Title" required>

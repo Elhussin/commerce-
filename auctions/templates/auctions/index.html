@@ -1,35 +1,51 @@
 {% extends "auctions/layout.html" %}
-
+{% load static %}
 {% block body %}
+
+{% if categories%}
+<h2 class="m-3">{{categories}}</h2>
+{% else %}
 <div class="m-3">
     <h2>Active Listings</h2>
 </div>
-
+{% endif %}
 {% comment %}  list box  {% endcomment %}
+<div class="home"> 
     <div class="grid" >
+     
         {% for i in categorie_list  %}
-            <div class= "gridIteam">
                 <a href="{% url 'listing' i.id %}" title="view">
                 {% comment %} img box  {% endcomment %}
-                <img  class="gridIteam-img"  src="{{i.url}}"  alt="{{i.title}}" style="width:100%;">
-             {% comment %} end image box {% endcomment %}
+               {% if i.url == 'null'%}
+               <div class="img-box">
+                <img  class="gridIteam-img"  src="{% static 'auctions/noimag.png' %}"  alt="{{i.title}}">
+               </div>
+               {% else%}
+               <div class="img-box">
+                <img  class="gridIteam-img"  src="{{i.url}}"  alt="{{i.title}}">
+               </div>
+                {% endif %}
+                {% comment %} end image box {% endcomment %}
              {% comment %} content box{% endcomment %}
              <div class="contact ">
-               <h2>{{i.title}} </h2>   
-              <h4><b> Price : </b>
+               <h2 >{{i.title}} </h2>   
+               <h5 ><b> Price : </b>
                 {% if i.endAmont < i.amount  %}
                 ${{i.amount}} 
                 {% else %}
                 ${{i.endAmont}} 
+          
                 {% endif%}
-            </h4>
-              <p> {{i.description}} </p>
-              <h5 class="cotgry"> {{i.category}} </h5>
+            </h5>
+            <p > {{i.description}} </p>
+            <hp >creat at  {{i.created_at}} </p>
+              <h5 class="p-3 cotgry"> {{i.category}} </h5>
               </div>
               {% comment %} end contact box {% endcomment %}
             </a>
-            </div>
+
                  {% comment %} end iteam box {% endcomment %}
         {% endfor %}
             </div>
+        </div>
 {% endblock %}

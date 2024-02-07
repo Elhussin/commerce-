@@ -6,51 +6,58 @@ body {
 .grid {
   display: grid;
   grid-template-columns: auto;
-  grid-column-gap: 20px;
+  grid-row-gap: 30px;
   background-color: white;
-  width: 90%;
-  grid-row-gap: 20px;
+  width: 90vw;
+  grid-row-gap: 20px; }
+
+.home {
+  max-width: 90%;
   margin: auto; }
 
-.grid-item {
-  margin-bottom: 20px; }
+.img-box {
+  width: 40%;
+  float: left; }
 
 .gridIteam-img {
-  float: left;
-  max-width: 40%;
-  width: 500px;
-  height: 400px;
-  max-height: 350px; }
+  width: 90%;
+  height: 350px;
+  max-width: 500px;
+  margin: auto; }
 
 .contact {
-  margin-left: auto; 
+  margin-left: 30px;
   width: 40%;
-  float: right;
-  
- }
+  float: left;
+  color: black; }
 
-.listin-img, .listin-contact {
-  max-width: 70%;
-  width: 900px;
-  max-height: 500px; 
-  margin-top: 10px;
+.listin-img {
+  width: 100%;
+  max-height: 500px; }
 
-}
+.listin-contact {
+  margin-top: 10px; }
 
 .listing {
   max-width: 900px;
+  width: 80%;
   margin: auto; }
 
 .clearBoth {
   clear: both; }
 
-.formList {
-  max-width: 700px;
-  width: 100%;
-  margin: auto; }
+.containerBox {
+  position: relative;
+  text-align: center;
+  color: white; }
+
+.top-left {
+  position: absolute;
+  top: 18px;
+  left: 16px; }
 
 .hr {
-  border-bottom: 2px solid black; }
+  border-bottom: 2px solid #575757; }
 
 .cotgry {
   background-color: #31c4f1;
@@ -65,18 +72,14 @@ body {
   grid-template-columns: auto auto auto auto; }
 
 @media screen and (max-width: 972px) {
-  .gridIteam-img, .contact, .grid-item, .listin-img, .listin-contact {
+  .contact, .listin-contact .listing {
+    width: 90%; }
+
+  .contact {
+    margin-left: 0; }
+
+  .gridIteam-img, .img-box, .contact {
     width: 100%;
-    max-width: 100%;
-    clear: both; }
-
-  .grid-item {
-    height: auto; }
-
-  .listing{
-    width: 90%;
-  }
-  
-}
+    max-width: 100%; } }
 
 /*# sourceMappingURL=styles.css.map */
