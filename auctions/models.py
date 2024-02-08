@@ -12,7 +12,7 @@ class User(AbstractUser):
 
 class Listing(models.Model):                
         title = models.CharField(max_length=64)
-        description =models.CharField(max_length=64)
+        description =models.CharField(max_length=200)
         amount = models.FloatField(max_length=64)
         endAmont = models.FloatField(max_length=64,default=0)
         url =models.CharField(max_length=250)

@@ -9,10 +9,12 @@ class ListingAdmin(admin.ModelAdmin):
 
 class CommentAdmin(admin.ModelAdmin):
     list_display = ("__str__", "comment")
-# class PassengerAdmin(admin.ModelAdmin):
-#     filter_horizontal = ("flights",)
-    
+
+class PaidAdmin(admin.ModelAdmin):
+    list_display = ("__str__", "Paid_amount")
+   
 
 admin.site.register(Comment,CommentAdmin)
 admin.site.register(Listing, ListingAdmin)
-# admin.site.register(Passenger, PassengerAdmin)
+admin.site.register(Paid, PaidAdmin)
+

@@ -1,23 +1,25 @@
 
 
 {% extends "auctions/layout.html" %}
-
+{% block title %} Categories{% endblock %}
 {% block body %}
     <h2 class="m-5"> Categories</h2>
     
 
 
-<div class="listing">
+
     <div class="continer">
 {% for i in categorie_list %}
 {% for x in i %}
 <a href="{% url 'categorieView' x   %}">
-<div class="grid-item p-5 bg-dark ">
-{{x}}
+<div class="continer-iteam">
+    <h5>
+    {{x}}
+    </h5>
 </div>
 </a>
 {% endfor %}
 {% endfor %}
 </div>
-</div>
+
 {% endblock %}

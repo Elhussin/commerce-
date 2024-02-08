@@ -1,14 +1,18 @@
 {% extends "auctions/layout.html" %}
 {% load static %}
+{% block title %}
+{% if categories%}Categories:{{categories}}
+{% elif Watch_list %}{{Watch_list}}
+{% else %}Active Listings{% endif %}
+
+{% endblock %}
 {% block body %}
 
-{% if categories%}
-<h2 class="m-3">{{categories}}</h2>
-{% else %}
-<div class="m-3">
-    <h2>Active Listings</h2>
-</div>
-{% endif %}
+
+
+{% if categories%}<h2 class="m-3">{{categories}}</h2>
+{% elif Watch_list %}<h2 class="m-3">{{Watch_list}}</h2>
+{% else %} <h2 class="m-3">Active Listings</h2>{% endif %}
 {% comment %}  list box  {% endcomment %}
 <div class="home"> 
     <div class="grid" >
@@ -17,13 +21,23 @@
                 <a href="{% url 'listing' i.id %}" title="view">
                 {% comment %} img box  {% endcomment %}
                {% if i.url == 'null'%}
+               <div class="containerBox">
                <div class="img-box">
                 <img  class="gridIteam-img"  src="{% static 'auctions/noimag.png' %}"  alt="{{i.title}}">
                </div>
+               <div class="top-left">
+                <h5 class="p-3 cotgry"> {{i.category}} </h5> 
+               </div>
+              </div>
                {% else%}
+               <div class="containerBox">
                <div class="img-box">
                 <img  class="gridIteam-img"  src="{{i.url}}"  alt="{{i.title}}">
                </div>
+               <div class="top-left">
+                <h5 class="p-3 cotgry"> {{i.category}} </h5> 
+               </div>
+              </div>
                 {% endif %}
                 {% comment %} end image box {% endcomment %}
              {% comment %} content box{% endcomment %}
@@ -39,11 +53,11 @@
             </h5>
             <p > {{i.description}} </p>
             <hp >creat at  {{i.created_at}} </p>
-              <h5 class="p-3 cotgry"> {{i.category}} </h5>
+             
               </div>
               {% comment %} end contact box {% endcomment %}
             </a>
-
+           
                  {% comment %} end iteam box {% endcomment %}
         {% endfor %}
             </div>

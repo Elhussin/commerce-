@@ -63,12 +63,9 @@ def register(request):
         return render(request, "auctions/register.html")
 
 
-
-# @login_required(login_url='auctions/login') #redirect 
-
+# @login_required
+@login_required(login_url='/login')
 def create_listing(request):
-    
-
     if request.method == "POST":
         title = request.POST["title"]
         description = request.POST["description"]
@@ -83,7 +80,7 @@ def create_listing(request):
             category='No Category Listed'
         
         try:
-            list = Listing.objects.create(title=title,description=description,amount=amount,url=url,category=category,user_id=user)
+            list = Listing.objects.create(title=title,description=description,amount=amount,url=url,category=category,user_id=user,endAmont=amount)
             list.save()
             return render(request, "auctions/create_listing.html",{"meesage":"Creat Sucess"})
       
@@ -94,12 +91,12 @@ def create_listing(request):
          print("her2")
          return render(request, "auctions/create_listing.html")
 
-
+@login_required(login_url='/login')
 def categories(request):
     categorie_list = Listing.objects.values_list('category').distinct()
     return render(request, "auctions/categories.html" ,{'categorie_list':categorie_list})
 
-
+@login_required(login_url='/login')
 def view_categories(request,categori):
     categorie_list =Listing.objects.all().filter(category=categori)
     return render(request, "auctions/index.html",{'categories':categori,'categorie_list':categorie_list})
@@ -120,7 +117,7 @@ def listing(request,id):
     except :
         comments=[]
     return render(request, "auctions/Listing.html",{'categorie_list':categorie_list ,'Comment':comments} )
-
+@login_required(login_url='/login')
 def add_comment(request): 
     if request.method == "POST":
         title = request.POST["title"]
@@ -136,7 +133,7 @@ def add_comment(request):
     else:
         return HttpResponseRedirect( reverse("listing", kwargs={"id": Listing_id}))
 
-
+@login_required(login_url='/login')
 def paid(request):
     if request.method == "POST":
         Paid_amount = request.POST["amount"]       
@@ -160,7 +157,7 @@ def paid(request):
             messages.success(request, '<p class="alret alert-success p-3">Erorr :paid did not add </p>')
             return HttpResponseRedirect(reverse("listing", kwargs={"id":Listings_id} ))
     return HttpResponseRedirect( reverse("index"))
-    
+@login_required(login_url='/login')   
 def end_paid(request):
     if request.method == "POST":
             
@@ -168,7 +165,7 @@ def end_paid(request):
         Listing.objects.filter(id=Listings_id).update(status="Close")
 
     return HttpResponseRedirect( reverse("listing", kwargs={"id": Listings_id})) 
-
+@login_required(login_url='/login')
 def watchlist(request):
     if "watchlist" not in request.session:
                request.session["watchlist"] = []   
@@ -178,9 +175,9 @@ def watchlist(request):
         categorie_list=getwatchlist(request.session["watchlist"])
         return HttpResponseRedirect( reverse("listing", kwargs={"id": Listings_id}))
     categorie_list=getwatchlist(request.session["watchlist"])
-    return render(request, "auctions/watchlist.html" ,{'categorie_lists':categorie_list})
+    return render(request, "auctions/index.html" ,{'categorie_list':categorie_list , 'Watch_list':'Watch list'})
 
-
+@login_required(login_url='/login')
 def Romvewatchlist(request):
     if request.method == "POST":
         RomveWatchlist = request.POST["RomveWatchlist"]
@@ -191,13 +188,9 @@ def Romvewatchlist(request):
              updat += [i]     
         request.session["watchlist"]=[]   
         request.session["watchlist"]+= updat  
-        # print( request.session["watchlist"]) 
-        # return render(request, "auctions/watchlist.html" ,{'categorie_lists':categorie_list})
-        # categorie_list=getwatchlist(request.session["watchlist"])
-        
         return HttpResponseRedirect( reverse("listing", kwargs={"id": RomveWatchlist}))
     categorie_list=getwatchlist(request.session["watchlist"])
-    return render(request, "auctions/watchlist.html" ,{'categorie_lists':categorie_list})
+    return render(request, "auctions/index.html" ,{'categorie_list':categorie_list , 'Watch_list':'Watch list'})
 
 def getwatchlist(q):
     watclist=[]

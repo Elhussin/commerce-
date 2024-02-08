@@ -1,10 +1,12 @@
 {% extends "auctions/layout.html" %}
 {% load static %}
+{% block title %} Listing{% endblock %}
+
 {% block body %}
 
 <div class="listing">
   {% if own%}
-<p class="alert alert-info">  won that auction   Mr/mrs : {{own.user_bids|title}}, final Price : {{own.Paid_amount}}  </p>
+<p class="alert alert-info">  Won that auction   Mr/Mrs : {{own.user_bids|title}}, Final Price : $ {{own.Paid_amount}}  </p>
   {% endif %}
 
   {% if request.user.id == categorie_list.user_id   %}
@@ -24,7 +26,8 @@
 
   {% comment %} gird box show iteam {% endcomment %}
 
-           
+  <div class="containerBox">
+    <div class="top-left">
         {% comment %}end button for owner can end the list only {% endcomment %}
  
         {% endif %}
@@ -116,7 +119,7 @@
     </form>
   </div>
   {% else %}
-  <p class="alert alert-info">  Can't paid this list <p>
+  <p class="alert alert-info">Owner Can't auctioneer in his list <p>
 
   {% endif %}
 
@@ -156,21 +159,26 @@
   {% comment %} if user not login {% endcomment %}
 
   {% else %}
-  <h5> To Add comment or Paid <a href="{% url 'login' %}">login</a></h5>
+  <p class="alert alert-info"> <a href="{% url 'login' %}">login</a>  To Add comment or Paid </p>
   {% endif %}
 
   {% comment %} thro all comments {% endcomment %}
 
   <div>
     <h5 class="hr "> Commentes </h5>
-
+{% if  Comment %}
     {% for i in Comment%}
     <div class="alert alert-info text-dark    ">
     <h5>{{i.title}} </h5>
     <p> {{i.comment}} </p>
-   <p>  Add By : <a href="#">{{i.user|title}} </a> <span class="float-right"> Creat at : {{i.Comment_at}} </span> </p>
+   <p>  Add By : <a href="#">{{i.user|title}} </a> <span class="float-right">    Creat at : {{i.Comment_at}} </span> </p>
     </div>
+  
     {% endfor %}
+    {% else %}
+    <p class="alert alert-warning">No any comments on this list  </p>
+
+    {% endif %}
 
 
 </div>

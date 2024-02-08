@@ -1,6 +1,7 @@
 $colorbakground:rgb(255, 255, 255);
-$colorFooter:rgb(87, 87, 87);
+$colorFooter:rgb(109, 119, 146);
 $fontBlack:black;
+$collectionColor: rgb(82, 99, 124);
 body {
     padding: 0px;
     margin: 0px;
@@ -10,20 +11,21 @@ body {
 
 %grid{
     display: grid;
-    grid-template-columns:  auto ;
     grid-row-gap: 30px; 
     background-color:$colorbakground;
     width:90vw;
     grid-row-gap: 20px;
-
-
+    margin: auto;
 }
+
+
 .home{
     max-width: 90%;
     margin: auto;
 }
 .grid {
     @extend %grid;
+    grid-template-columns:  auto ;
 }
 
 .img-box{
@@ -41,12 +43,23 @@ body {
   }
 .contact {
 
-    margin-left: 30px;
+    margin: 30px 0  0 30px;
+    
     width: 40%;
     float: left;
     color: $fontBlack;
 
 }
+
+
+.cotgry{
+    margin-top: 20px;
+    background-color:$collectionColor;
+    color:$colorbakground;
+    padding: 10px;
+
+}
+
 .listin-img {
     width: 100%;
     max-height: 500px;
@@ -72,7 +85,7 @@ body {
 .containerBox {
     position: relative;
     text-align: center;
-    color: white;
+    color:$colorbakground
   }
 
 .top-left {
@@ -86,24 +99,22 @@ body {
 
 
 
-
-.cotgry{
-    background-color: rgb(49, 196, 241);
-    color: white;
-    padding: 10px;
-}
-
 .continer{
-    display: grid;
-    padding: 5px; 
+    @extend %grid;
     grid-column-gap: 20px; 
-    grid-row-gap: 10px;
-    grid-template-columns:  auto auto auto auto ;
+    grid-template-columns:  auto auto auto  ;
    
 
 }
-
-
+.continer-iteam{
+    background-color:$collectionColor ;
+    font-size: large;
+    color: $colorbakground;
+    padding: 30px 5px;
+    border-radius: 50%;
+    max-width: 250px;
+    text-align: center;
+}
 
 
 @media screen and (max-width: 972px) {
@@ -113,9 +124,12 @@ body {
         margin-left: 0;
     }
 
-    .gridIteam-img ,.img-box ,.contact{
+    .gridIteam-img ,.img-box ,.contact {
         width: 100%;
         max-width: 100%;
+    }
+    .continer-iteam{
+        font-size: small;
     }
     
 
