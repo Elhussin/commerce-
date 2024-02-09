@@ -1,7 +1,9 @@
 body {
   padding: 0px;
   margin: 0px;
-  font-family: 'Times New Roman', Times, serif; }
+  font-family: 'Times New Roman', Times, serif;
+  color: black;
+  background-color: white; }
 
 .grid, .continer {
   display: grid;

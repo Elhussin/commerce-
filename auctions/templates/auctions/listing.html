@@ -5,10 +5,16 @@
 {% block body %}
 
 <div class="listing">
-  {% if own%}
-<p class="alert alert-info">  Won that auction   Mr/Mrs : {{own.user_bids|title}}, Final Price : $ {{own.Paid_amount}}  </p>
-  {% endif %}
+  
+  {% if categorie_list.status == "Close" %}
+  {% if current %}
+<p class="alert alert-info">  Won that auction   Mr/Mrs : {{current.user_bids|title}}, Final Price : $ {{current.Paid_amount}}  </p>
+{% else %}
+<p class="alert alert-info"> This listing Closed but no  bids on it. </p>
+{% endif %}
 
+  {% endif %}
+  
   {% if request.user.id == categorie_list.user_id   %}
   {% if categorie_list.status == "open" %}
 
@@ -18,16 +24,15 @@
         <input type="number" name="end_listId" value="{{categorie_list.id}}" hidden>
         <input class="btn btn-warning " type="submit" value="End Paid">
       </div>
+     
     </form>
-   
 
   {% endif %}
   <h2> Listing</h2>
 
   {% comment %} gird box show iteam {% endcomment %}
 
-  <div class="containerBox">
-    <div class="top-left">
+
         {% comment %}end button for owner can end the list only {% endcomment %}
  
         {% endif %}
@@ -65,20 +70,33 @@
 
     
       <div class="listin-contact">
-        <h2>{{categorie_list.title}} </h2>
-        <h4><b> Price : </b>
-          
-          {% if categorie_list.endAmont < categorie_list.amount  %}
-          ${{categorie_list.amount}} 
+        <h5>{{categorie_list.title}} </h5>
+     
+        <b> Price : 
+          {% if current %}
+          {% if categorie_list.amount > current.Paid_amount  %}
+          $ {{categorie_list.amount}} 
           {% else %}
-          ${{categorie_list.endAmont}} 
+          $ {{current.Paid_amount}} 
           {% endif%}
-        
-        <p> {{categorie_list.description}} </p>
-        <p>Add at {{categorie_list.created_at}} </p>
-        <h5> Catgery: {{categorie_list.category}} </h5>
-        <h5>status:{{ categorie_list.status}} </h5>
-        <h5> Creat By: <a href="#">{{ categorie_list.user|title}} <a/> </h5>
+          {% else %}
+          $ {{categorie_list.amount}} 
+          {% endif%}
+        </b>
+          <div class="mt-5 ">
+           
+            <b class="list-group">  Datiles </b>
+
+        <url class="list-group border-0">       
+          <li class="list-group-item  border-0">Listid by : <a href="#">{{ categorie_list.user|title}} <a/>  </li>
+          <li class="list-group-item border-0"> Catgery : {{categorie_list.category}}  </li>
+          <li class="list-group-item border-0">  Created  {{categorie_list.created_at}}  </li>
+          <li class="list-group-item border-0">  Status : {{ categorie_list.status|title}}   </li>
+       
+          <url>
+            <p class="float-right">Last Update  {{categorie_list.updated_at}} </p>
+           
+          </div>
 
     </div>
 
@@ -101,7 +119,7 @@
 
   {% comment %} confiarm list open our not {% endcomment %}
   {% if categorie_list.status == "open" %}
-
+  {{ Toatal_Baid|length }}  bid(s) so far . current bid for {{ current.user_bids}}
   {% if request.user.id != categorie_list.user_id %}
   {% comment %} addd paid oofer only for login and and open iteam & not for owner {% endcomment %}
 
@@ -168,10 +186,10 @@
     <h5 class="hr "> Commentes </h5>
 {% if  Comment %}
     {% for i in Comment%}
-    <div class="alert alert-info text-dark    ">
+    <div class="alert alert-info   ">
     <h5>{{i.title}} </h5>
     <p> {{i.comment}} </p>
-   <p>  Add By : <a href="#">{{i.user|title}} </a> <span class="float-right">    Creat at : {{i.Comment_at}} </span> </p>
+     <p>  Add By : <a href="#">{{i.user|title}} </a> <span class="float-right">    Creat at : {{i.Comment_at}} </span> </p>
     </div>
   
     {% endfor %}

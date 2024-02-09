@@ -12,7 +12,7 @@ class User(AbstractUser):
 
 class Listing(models.Model):                
         title = models.CharField(max_length=64)
-        description =models.CharField(max_length=200)
+        description =models.CharField(max_length=64)
         amount = models.FloatField(max_length=64)
         endAmont = models.FloatField(max_length=64,default=0)
         url =models.CharField(max_length=250)
@@ -41,3 +41,4 @@ class Paid(models.Model):
     Paid_amount = models.FloatField(max_length=64)
     user_bids = models.ForeignKey(User, on_delete=models.CASCADE, related_name="UserId")
     Listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="listID")
+    add_at = models.DateTimeField(auto_now=True)

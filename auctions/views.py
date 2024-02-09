@@ -6,8 +6,14 @@ from django.urls import reverse
 from .models import User  ,Listing ,Comment,Paid
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+import datetime
+from django import forms
 
 
+class NameForm(forms.Form):
+    your_name = forms.CharField(label='Your name', max_length=100)
+    
+    
 def index(request):
     categorie_list_with_paid = Listing.objects.select_related('user')
     return render(request, "auctions/index.html", {'categorie_list':categorie_list_with_paid})
@@ -66,6 +72,7 @@ def register(request):
 # @login_required
 @login_required(login_url='/login')
 def create_listing(request):
+    # get form 
     if request.method == "POST":
         title = request.POST["title"]
         description = request.POST["description"]
@@ -73,107 +80,124 @@ def create_listing(request):
         url = request.POST["url"]
         category = request.POST["category"]
         user = request.user.id
-
+        
+        #  add default value to null url or category
+ 
         if not url :
             url ='null'
         if category == 'null':
             category='No Category Listed'
-        
+        # sav data in database
         try:
             list = Listing.objects.create(title=title,description=description,amount=amount,url=url,category=category,user_id=user,endAmont=amount)
             list.save()
             return render(request, "auctions/create_listing.html",{"meesage":"Creat Sucess"})
-      
-        except IntegrityError:
-               print("her x",IntegrityError)
-               return render(request, "auctions/create_listing.html",{"error":IntegrityError})
+        # error massege 
+        except :
+               return render(request, "auctions/create_listing.html",{"error":"failed to create this listing"})
     else:
-         print("her2")
          return render(request, "auctions/create_listing.html")
 
 @login_required(login_url='/login')
 def categories(request):
+    #  a sort catogry from data base 
     categorie_list = Listing.objects.values_list('category').distinct()
     return render(request, "auctions/categories.html" ,{'categorie_list':categorie_list})
 
 @login_required(login_url='/login')
 def view_categories(request,categori):
+    #  view all items under select category
     categorie_list =Listing.objects.all().filter(category=categori)
     return render(request, "auctions/index.html",{'categories':categori,'categorie_list':categorie_list})
 
 
 
 def listing(request,id):
-    try:
+    #  view listing  
+    #  get datt for seleactd list 
        categorie_list = Listing.objects.select_related('user').get(pk=id)
+       
+    #  get all comment for this list 
        comments=Comment.objects.select_related('user').filter(Listing_id=id)
-       own=[]
-       if categorie_list.status =="Close" :
-             own= Paid.objects.select_related('user_bids').filter(Listing_id=id).last()
-       else :
-           own=[]
-        
-       return render(request, "auctions/Listing.html",{'categorie_list':categorie_list ,'Comment':comments ,"own":own } )
-    except :
-        comments=[]
-    return render(request, "auctions/Listing.html",{'categorie_list':categorie_list ,'Comment':comments} )
+    #    git all bid to this list 
+       Toatal_Baid= Paid.objects.select_related('user_bids').filter(Listing_id=id)
+    #  get last bid for this list 
+       current=Toatal_Baid.last()
+    # mesag view 
+       
+             
+       return render(request, "auctions/Listing.html",{'categorie_list':categorie_list ,'Comment':comments ,
+                                                       'Toatal_Baid':Toatal_Baid ,'current':current } )
+
+
 @login_required(login_url='/login')
 def add_comment(request): 
+    # get form 
     if request.method == "POST":
         title = request.POST["title"]
         comment = request.POST["comment"]
         Listing_id = request.POST["listId"]
         user_id = request.POST["userId"]
+        
+        # insert data to comment table 
         try:
             add_commentes = Comment.objects.create(title=title,comment=comment,Listing_id=Listing_id,user_id=user_id)
             add_commentes.save()
             return HttpResponseRedirect( reverse("listing", kwargs={"id": Listing_id}))
         except :
+        # error message 
                return HttpResponseRedirect( reverse("listing", kwargs={"id": Listing_id},),{"meesage":'Comment not ADD'})
     else:
-        return HttpResponseRedirect( reverse("listing", kwargs={"id": Listing_id}))
+        return HttpResponseRedirect( reverse("index"))
 
 @login_required(login_url='/login')
 def paid(request):
+    # gei bid form 
     if request.method == "POST":
         Paid_amount = request.POST["amount"]       
         Listings_id = request.POST["paid_listId"]
         user_bids_id = request.POST["paid_userId"]
         amountChek =Listing.objects.all().filter(id=Listings_id).values()
+    #   confirm bid not less than current amount
         if  amountChek[0]['amount'] >= float(Paid_amount) or amountChek[0]['endAmont'] >= float(Paid_amount)  :
             messages.success(request, '<p class="alret alert-warning p-3">The entered amount is smaller than the current amount. </p>')
             return HttpResponseRedirect(reverse("listing", kwargs={"id":Listings_id} ))
-
+    #   updat bid in paid tabel  also ubdat end amount in listing tabel 
         try:              
             add_commentes = Paid.objects.create(Paid_amount=Paid_amount, user_bids_id=user_bids_id, Listing_id=Listings_id )
-            add_commentes.save()
-            
-            updt=Listing.objects.filter(id=Listings_id).update(endAmont=Paid_amount)
-        
+            add_commentes.save()     
+            Listing.objects.filter(id=Listings_id).update(endAmont=Paid_amount ,updated_at=datetime.datetime.now())
             messages.success(request, '<p class="alret alert-success p-3">Add Paid success. </p>')
             return HttpResponseRedirect(reverse("listing", kwargs={"id":Listings_id} ))
-        
-        except IntegrityError:
+    # error message
+        except:
             messages.success(request, '<p class="alret alert-success p-3">Erorr :paid did not add </p>')
             return HttpResponseRedirect(reverse("listing", kwargs={"id":Listings_id} ))
     return HttpResponseRedirect( reverse("index"))
+
 @login_required(login_url='/login')   
 def end_paid(request):
     if request.method == "POST":
-            
+    #  close listing 
         Listings_id = request.POST["end_listId"]
         Listing.objects.filter(id=Listings_id).update(status="Close")
+        return HttpResponseRedirect( reverse("listing", kwargs={"id": Listings_id})) 
+    return HttpResponseRedirect( reverse("index"))
 
-    return HttpResponseRedirect( reverse("listing", kwargs={"id": Listings_id})) 
 @login_required(login_url='/login')
 def watchlist(request):
+    #  creat session for watchlist
     if "watchlist" not in request.session:
-               request.session["watchlist"] = []   
+        request.session["watchlist"] = []  
+    # get watchlist form  
     if request.method == "POST":
-        Listings_id = request.POST["Watchlist"]           
+        Listings_id = request.POST["Watchlist"]      
+    #  add iteam to watchlist  
         request.session["watchlist"] += [int(Listings_id)]
+    # get  list for all items by  watchlist function  
         categorie_list=getwatchlist(request.session["watchlist"])
         return HttpResponseRedirect( reverse("listing", kwargs={"id": Listings_id}))
+    
     categorie_list=getwatchlist(request.session["watchlist"])
     return render(request, "auctions/index.html" ,{'categorie_list':categorie_list , 'Watch_list':'Watch list'})
 
@@ -182,6 +206,7 @@ def Romvewatchlist(request):
     if request.method == "POST":
         RomveWatchlist = request.POST["RomveWatchlist"]
         RomveWatchlist=int(RomveWatchlist)
+        # romve iteam from watchlist session
         updat=[]
         for i in request.session["watchlist"]:
            if i != RomveWatchlist:      
@@ -189,10 +214,13 @@ def Romvewatchlist(request):
         request.session["watchlist"]=[]   
         request.session["watchlist"]+= updat  
         return HttpResponseRedirect( reverse("listing", kwargs={"id": RomveWatchlist}))
+    
     categorie_list=getwatchlist(request.session["watchlist"])
     return render(request, "auctions/index.html" ,{'categorie_list':categorie_list , 'Watch_list':'Watch list'})
 
+# 
 def getwatchlist(q):
+    # get all data from database for items saved in watchlist session
     watclist=[]
     for i in q : 
         watclist += Listing.objects.all().filter(id=i).values()

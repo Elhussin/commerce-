@@ -6,6 +6,8 @@ body {
     padding: 0px;
     margin: 0px;
     font-family:'Times New Roman', Times, serif;
+    color:$fontBlack ;
+    background-color: $colorbakground;
 
 }
 
@@ -44,7 +46,6 @@ body {
 .contact {
 
     margin: 30px 0  0 30px;
-    
     width: 40%;
     float: left;
     color: $fontBlack;
