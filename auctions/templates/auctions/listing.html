@@ -119,7 +119,7 @@
 
   {% comment %} confiarm list open our not {% endcomment %}
   {% if categorie_list.status == "open" %}
-  {{ Toatal_Baid|length }}  bid(s) so far . current bid for {{ current.user_bids}}
+  {{ Toatal_Baid|length }}  bid(s) so far . current bid for <a href="#">{{ current.user_bids|title}} </a>
   {% if request.user.id != categorie_list.user_id %}
   {% comment %} addd paid oofer only for login and and open iteam & not for owner {% endcomment %}
 

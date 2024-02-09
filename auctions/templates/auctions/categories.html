@@ -3,23 +3,29 @@
 {% extends "auctions/layout.html" %}
 {% block title %} Categories{% endblock %}
 {% block body %}
+
     <h2 class="m-5"> Categories</h2>
     
 
 
-
+{% comment %} view categorie  {% endcomment %}
     <div class="continer">
+        {% if categorie_list  %}
 {% for i in categorie_list %}
 {% for x in i %}
 <a href="{% url 'categorieView' x   %}">
 <div class="continer-iteam">
-    <h5>
-    {{x}}
-    </h5>
+   
+    {% if x == 'No Category Listed'%}
+    <h5>Uncategory </h5>
+    {% else %}
+    <h5> {{x}}</h5>
+    {% endif %}
 </div>
 </a>
 {% endfor %}
 {% endfor %}
+{% endif %}
 </div>
 
 {% endblock %}

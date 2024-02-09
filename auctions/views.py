@@ -8,11 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import datetime
 from django import forms
-
-
-class NameForm(forms.Form):
-    your_name = forms.CharField(label='Your name', max_length=100)
-    
+from . import addform
     
 def index(request):
     categorie_list_with_paid = Listing.objects.select_related('user')
@@ -46,7 +42,6 @@ def register(request):
     if request.method == "POST":
         username = request.POST["username"]
         email = request.POST["email"]
-
         # Ensure password matches confirmation
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
@@ -74,15 +69,16 @@ def register(request):
 def create_listing(request):
     # get form 
     if request.method == "POST":
-        title = request.POST["title"]
-        description = request.POST["description"]
-        amount = request.POST["amount"]
-        url = request.POST["url"]
-        category = request.POST["category"]
+        form = addform.creatlist(request.POST)
         user = request.user.id
-        
+        if form.is_valid():
+            title = form.cleaned_data["title"]
+            description = form.cleaned_data["description"]
+            amount = form.cleaned_data["amount"]
+            url = request.POST["url"]
+            category = request.POST["category"]
+    
         #  add default value to null url or category
- 
         if not url :
             url ='null'
         if category == 'null':
@@ -91,18 +87,22 @@ def create_listing(request):
         try:
             list = Listing.objects.create(title=title,description=description,amount=amount,url=url,category=category,user_id=user,endAmont=amount)
             list.save()
-            return render(request, "auctions/create_listing.html",{"meesage":"Creat Sucess"})
+            # return render(request, 'auctions/add.html', {'form': form})
+            return render(request, "auctions/creatList.html",{"meesage":"Creat Sucess" ,'form': form})
         # error massege 
         except :
-               return render(request, "auctions/create_listing.html",{"error":"failed to create this listing"})
+               return render(request, "auctions/creatList.html",{"error":"failed to create this listing",'form': form})
     else:
-         return render(request, "auctions/create_listing.html")
+         form = addform.creatlist()
+         return render(request, "auctions/creatList.html",{'form': form})
+
 
 @login_required(login_url='/login')
 def categories(request):
     #  a sort catogry from data base 
     categorie_list = Listing.objects.values_list('category').distinct()
     return render(request, "auctions/categories.html" ,{'categorie_list':categorie_list})
+
 
 @login_required(login_url='/login')
 def view_categories(request,categori):
@@ -116,7 +116,6 @@ def listing(request,id):
     #  view listing  
     #  get datt for seleactd list 
        categorie_list = Listing.objects.select_related('user').get(pk=id)
-       
     #  get all comment for this list 
        comments=Comment.objects.select_related('user').filter(Listing_id=id)
     #    git all bid to this list 
@@ -124,10 +123,9 @@ def listing(request,id):
     #  get last bid for this list 
        current=Toatal_Baid.last()
     # mesag view 
-       
-             
        return render(request, "auctions/Listing.html",{'categorie_list':categorie_list ,'Comment':comments ,
                                                        'Toatal_Baid':Toatal_Baid ,'current':current } )
+
 
 
 @login_required(login_url='/login')
@@ -225,4 +223,5 @@ def getwatchlist(q):
     for i in q : 
         watclist += Listing.objects.all().filter(id=i).values()
     return watclist
-    
+
+
